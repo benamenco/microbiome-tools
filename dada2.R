@@ -1,6 +1,6 @@
 # 
-source("https://bioconductor.org/biocLite.R")
-biocLite("dada2")
+# source("https://bioconductor.org/biocLite.R")
+# biocLite("dada2")
 
 library(dada2); 
 packageVersion("dada2")
@@ -11,7 +11,7 @@ packageVersion("ShortRead")
 library(ggplot2); 
 packageVersion("ggplot2")
 
-path <- "~/metagenomics/MiSeq_SOP" 
+path <- "~/tools_dada2/MiSeq_SOP" 
 fns <- list.files(path)
 fns
 
@@ -59,7 +59,7 @@ derepFs[[1]]
 # sample infer
 
 dadaFs <- dada(derepFs, err = NULL, selfConsist = TRUE)
-dadaRs <- dada(derepRs, err = NULL, selfConsist = TRUE, multithread=TRUE)
+dadaRs <- dada(derepRs, err = NULL, selfConsist = TRUE)
 
 dadaFs[[1]]
 plotErrors(dadaFs[[1]], nominalQ = TRUE)
@@ -86,3 +86,11 @@ sum(seqtab.nochim) / sum(seqtab)
 
 # assign taxa
 
+taxa <- assignTaxonomy(seqtab.nochim, refFasta = "rdp_train_set_14.fa.gz")
+colnames(taxa) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus")
+unname(head(taxa))
+# New in 1.1: Accurate species-level assignment using exact matching with assignSpecies
+
+
+# RData
+save.image("dada2.RData")
